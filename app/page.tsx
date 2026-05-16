@@ -1,6 +1,5 @@
 'use client';
 import { useState, useEffect } from 'react';
-import Head from 'next/head';
 
 export default function Home() {
   const [tasks, setTasks] = useState<{ id: number; text: string }[]>([]);
@@ -31,10 +30,9 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center py-10 px-4">
-      <Head>
-        <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3209/3209265.png" />
-        <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3209/3209265.png" />
-      </Head>
+      {/* Das zwingt mobile Browser, das Icon zu ziehen */}
+      <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3209/3209265.png" />
+      <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3209/3209265.png" />
 
       <div className="w-full max-w-md bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-700">
         <h1 className="text-2xl font-bold text-center mb-1 text-white">Meine Private App</h1>
