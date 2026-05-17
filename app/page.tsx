@@ -14,12 +14,12 @@ interface ShoppingItem {
 
 const STORES: Store[] = ['Hofer', 'Lidl', 'Spar', 'Sonstige'];
 
-// Kräftige, leuchtende Farben für den Dark Mode (Perfekt im Geschäft lesbar!)
+// Extra kräftige, leuchtende Farben für die Buttons im Geschäft
 const STORE_COLORS: Record<Store, string> = {
-  'Hofer': 'bg-blue-500/30 text-blue-300 border-blue-400/40 font-bold',
-  'Lidl': 'bg-yellow-500/20 text-yellow-300 border-yellow-400/40 font-bold',
-  'Spar': 'bg-red-500/30 text-red-300 border-red-400/40 font-bold',
-  'Sonstige': 'bg-gray-700/60 text-gray-300 border-gray-600 font-bold',
+  'Hofer': 'bg-blue-600 text-white border-blue-400 font-black text-xs uppercase tracking-wider',
+  'Lidl': 'bg-amber-500 text-black border-amber-300 font-black text-xs uppercase tracking-wider',
+  'Spar': 'bg-red-600 text-white border-red-400 font-black text-xs uppercase tracking-wider',
+  'Sonstige': 'bg-gray-600 text-white border-gray-500 font-black text-xs uppercase tracking-wider',
 };
 
 export default function Home() {
@@ -150,7 +150,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#111827] text-gray-100 flex flex-col items-center py-6 px-4 font-sans select-none">
+    <div className="min-h-screen bg-[#111827] text-white flex flex-col items-center py-6 px-4 font-sans select-none">
       <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3209/3209265.png" />
       <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3209/3209265.png" />
 
@@ -163,7 +163,7 @@ export default function Home() {
             <div>
               <h1 className="text-xl font-black text-white tracking-wide">Meine Einkäufe</h1>
               {totalSum > 0 && (
-                <p className="text-emerald-400 font-black text-xs">Offen: {totalSum.toFixed(2)} €</p>
+                <p className="text-emerald-400 font-black text-sm">Offen: {totalSum.toFixed(2)} €</p>
               )}
             </div>
           </div>
@@ -171,10 +171,10 @@ export default function Home() {
           {items.length > 0 && !isLoading && (
             <button
               onClick={() => setIsFocusMode(!isFocusMode)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all border ${
                 isFocusMode 
                   ? 'bg-amber-500 border-amber-400 text-gray-950' 
-                  : 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600'
+                  : 'bg-gray-700 border-gray-600 text-white hover:bg-gray-600'
               }`}
             >
               {isFocusMode ? '⚙️ Bearbeiten' : '🛒 Einkauf starten'}
@@ -184,9 +184,9 @@ export default function Home() {
 
         {/* LADEANZEIGE */}
         {isLoading ? (
-          <div className="flex-1 flex flex-col items-center justify-center text-gray-400 gap-2">
+          <div className="flex-1 flex flex-col items-center justify-center text-white gap-2">
             <div className="w-6 h-6 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-xs font-medium text-gray-400">Verbinde mit Live-Datenbank...</p>
+            <p className="text-sm font-black text-gray-300">Verbinde mit Live-Datenbank...</p>
           </div>
         ) : (
           <>
@@ -199,7 +199,7 @@ export default function Home() {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Z.B. 3 Milch, Brot..."
-                    className="flex-[2] bg-[#374151] border border-gray-600 rounded-2xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-emerald-500 text-base"
+                    className="flex-[2] bg-[#374151] border border-gray-500 rounded-2xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-emerald-500 text-base font-bold"
                   />
                   <input
                     type="text"
@@ -207,7 +207,7 @@ export default function Home() {
                     value={priceInput}
                     onChange={(e) => setPriceInput(e.target.value)}
                     placeholder="€"
-                    className="w-16 bg-[#374151] border border-gray-600 rounded-2xl px-2 py-3 text-white text-center placeholder-gray-500 focus:outline-none focus:border-emerald-500 text-base"
+                    className="w-16 bg-[#374151] border border-gray-500 rounded-2xl px-2 py-3 text-white text-center placeholder-gray-400 focus:outline-none focus:border-emerald-500 text-base font-bold"
                   />
                   <button
                     type="submit"
@@ -226,7 +226,7 @@ export default function Home() {
                       className={`flex-1 py-2.5 rounded-xl border transition-all font-black text-center text-sm ${
                         selectedStore === store 
                           ? 'bg-emerald-600 border-emerald-500 text-white shadow-md' 
-                          : 'bg-[#2d3748] border-gray-600 text-gray-300 hover:bg-[#374151]'
+                          : 'bg-[#2d3748] border-gray-600 text-white hover:bg-[#374151]'
                       }`}
                     >
                       {store}
@@ -239,9 +239,9 @@ export default function Home() {
             {/* LISTENBEREICH */}
             <div className="space-y-2 flex-1 overflow-y-auto pr-0.5">
               {items.length === 0 ? (
-                <div className="text-center py-16 text-gray-500">
+                <div className="text-center py-16 text-gray-400">
                   <span className="text-4xl block mb-2">🛒</span>
-                  <p className="text-sm font-medium">Keine Einkäufe geplant.</p>
+                  <p className="text-sm font-black">Keine Einkäufe geplant.</p>
                 </div>
               ) : (
                 sortedItems.map((item, index) => {
@@ -251,13 +251,13 @@ export default function Home() {
                   return (
                     <div key={item.id} className="space-y-1">
                       {showStoreHeader && (
-                        <div className="flex justify-between items-center px-1 pt-3 pb-1 text-xs font-black uppercase tracking-wider text-gray-400 border-b border-gray-700">
+                        <div className="flex justify-between items-center px-1 pt-3 pb-1 text-sm font-black uppercase tracking-wider text-amber-400 border-b border-gray-700">
                           <span>{item.store}</span>
-                          {storeSum > 0 && <span className="text-emerald-400 font-extrabold">{storeSum.toFixed(2)} €</span>}
+                          {storeSum > 0 && <span className="text-emerald-400 font-black">{storeSum.toFixed(2)} €</span>}
                         </div>
                       )}
                       {item.checked && index > 0 && !sortedItems[index - 1].checked && (
-                        <div className="px-1 pt-4 pb-1 text-xs font-black uppercase tracking-wider text-gray-500 border-b border-gray-700/60">
+                        <div className="px-1 pt-4 pb-1 text-sm font-black uppercase tracking-wider text-gray-400 border-b border-gray-700/60">
                           Erledigt
                         </div>
                       )}
@@ -269,7 +269,7 @@ export default function Home() {
                         } ${
                           item.checked 
                             ? 'bg-gray-800/20 border-gray-700/40 text-gray-500 line-through opacity-40' 
-                            : 'bg-[#2d3748] border-gray-600/80 text-white shadow-sm'
+                            : 'bg-[#2d3748] border-gray-600 text-white shadow-sm'
                         }`}
                       >
                         {/* Links */}
@@ -277,7 +277,7 @@ export default function Home() {
                           <div className={`rounded-lg border flex items-center justify-center transition-all shrink-0 ${
                             isFocusMode ? 'w-6 h-6' : 'w-5.5 h-5.5'
                           } ${
-                            item.checked ? 'bg-emerald-500 border-emerald-500' : 'border-gray-400 bg-[#1f2937]'
+                            item.checked ? 'bg-emerald-500 border-emerald-500' : 'border-gray-300 bg-[#1f2937]'
                           }`}>
                             {item.checked && (
                               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
@@ -287,7 +287,7 @@ export default function Home() {
                           </div>
                           
                           <div className="flex flex-col min-w-0 gap-1.5">
-                            <span className={`font-bold break-words leading-tight text-white ${isFocusMode ? 'text-lg' : 'text-base'} ${item.checked ? 'text-gray-500' : ''}`}>
+                            <span className={`font-black break-words leading-tight text-white ${isFocusMode ? 'text-xl' : 'text-lg'} ${item.checked ? 'text-gray-500 !font-normal' : ''}`}>
                               {item.quantity > 1 && <span className="text-emerald-400 font-black mr-1.5">{item.quantity}x</span>}
                               {item.text}
                             </span>
@@ -297,7 +297,7 @@ export default function Home() {
                                 <button
                                   disabled={isFocusMode}
                                   onClick={(e) => cycleStore(item.id, e)}
-                                  className={`text-[10px] px-2 py-0.5 rounded-md border tracking-wider uppercase transition-all ${
+                                  className={`text-[11px] px-2.5 py-0.5 rounded-md border font-black ${
                                     STORE_COLORS[item.store]
                                   }`}
                                 >
@@ -305,7 +305,7 @@ export default function Home() {
                                 </button>
                               )}
                               {item.price > 0 && (
-                                <span className={`text-xs font-bold ${item.checked ? 'text-gray-600' : 'text-gray-300'}`}>
+                                <span className={`text-sm font-bold ${item.checked ? 'text-gray-600' : 'text-gray-200'}`}>
                                   {item.price.toFixed(2)} € {item.quantity > 1 && `(Gesamt: ${(item.price * item.quantity).toFixed(2)} €)`}
                                 </span>
                               )}
@@ -316,16 +316,16 @@ export default function Home() {
                         {/* Rechts */}
                         <div className="flex items-center gap-2 shrink-0">
                           {!item.checked && !isFocusMode && (
-                            <div className="flex items-center bg-[#1f2937] rounded-xl border border-gray-600 overflow-hidden">
+                            <div className="flex items-center bg-[#1f2937] rounded-xl border border-gray-500 overflow-hidden">
                               <button
                                 onClick={(e) => changeQuantity(item.id, -1, e)}
-                                className="px-3 py-1 text-gray-300 hover:text-white hover:bg-gray-700 transition-colors font-black text-base"
+                                className="px-3 py-1 text-white hover:bg-gray-700 transition-colors font-black text-base"
                               >
                                 -
                               </button>
                               <button
                                 onClick={(e) => changeQuantity(item.id, 1, e)}
-                                className="px-3 py-1 text-gray-300 hover:text-white hover:bg-gray-700 transition-colors font-black text-base border-l border-gray-600"
+                                className="px-3 py-1 text-white hover:bg-gray-700 transition-colors font-black text-base border-l border-gray-500"
                               >
                                 +
                               </button>
@@ -335,7 +335,7 @@ export default function Home() {
                           {!isFocusMode && (
                             <button
                               onClick={(e) => deleteItem(item.id, e)}
-                              className="text-gray-400 hover:text-red-400 p-1.5 transition-colors rounded-xl"
+                              className="text-gray-300 hover:text-red-400 p-1.5 transition-colors rounded-xl"
                             >
                               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -354,7 +354,7 @@ export default function Home() {
             {items.some(item => item.checked) && !isFocusMode && (
               <button
                 onClick={clearChecked}
-                className="w-full mt-4 bg-gray-800/40 hover:bg-red-500/10 hover:text-red-400 text-gray-400 text-xs py-2.5 rounded-xl border border-gray-700 transition-all font-black uppercase tracking-wider shrink-0"
+                className="w-full mt-4 bg-gray-800 hover:bg-red-900/40 text-red-200 text-xs py-2.5 rounded-xl border border-gray-600 transition-all font-black uppercase tracking-wider shrink-0"
               >
                 Einkaufswagen leeren
               </button>
