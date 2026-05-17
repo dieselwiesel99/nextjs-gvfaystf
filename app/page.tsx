@@ -123,12 +123,16 @@ export default function Home() {
     saveToDatabase(newItems);
   };
 
-  const clearChecked = () => {
-    const newItems = items.filter(item => !item.checked);
-    saveToDatabase(newItems);
+  // FIX: Hier ist die Sicherheitsabfrage und das automatische Zurücksetzen des Fokus-Modus eingebaut
+  const handleClearChecked = () => {
+    const confirmClear = window.confirm("Wollen Sie den Wagen leeren?");
+    if (confirmClear) {
+      const newItems = items.filter(item => !item.checked);
+      saveToDatabase(newItems);
+      setIsFocusMode(false); // Zurück in den Planungsmodus schalten
+    }
   };
 
-  // Aufteilung für das iPad-Layout
   const activeItems = items.filter(item => !item.checked).sort((a, b) => STORES.indexOf(a.store) - STORES.indexOf(b.store));
   const checkedItems = items.filter(item => item.checked);
 
@@ -143,7 +147,6 @@ export default function Home() {
       <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3209/3209265.png" />
       <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3209/3209265.png" />
 
-      {/* Die Box passt sich jetzt flexibel an: md:max-w-4xl erlaubt volle Breite am iPad */}
       <div className="w-full max-w-md md:max-w-4xl bg-gray-800 rounded-3xl shadow-2xl p-5 border border-gray-700/60 flex flex-col min-h-[90vh]">
         
         {/* HEADER */}
@@ -181,14 +184,14 @@ export default function Home() {
           <>
             {/* EINGABEBEREICH */}
             {!isFocusMode && (
-              <form onSubmit={addItem} className="space-y-3 mb-5 shrink-0 max-w-xl mx-auto w-full">
-                <div className="flex gap-2">
+              <form onSubmit={addItem} className="space-y-3 mb-5 shrink-0 w-full border-b border-gray-700/30 pb-4">
+                <div className="flex gap-2 w-full">
                   <input
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Z.B. 3 Milch, Brot..."
-                    className="flex-[3] bg-gray-700/80 border border-gray-600 rounded-2xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-emerald-500 transition-all text-base"
+                    className="flex-1 bg-gray-700/80 border border-gray-600 rounded-2xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-emerald-500 transition-all text-base"
                   />
                   <input
                     type="text"
@@ -206,7 +209,7 @@ export default function Home() {
                   </button>
                 </div>
 
-                <div className="flex gap-1.5 py-0.5 text-xs">
+                <div className="flex gap-1.5 py-0.5 text-xs w-full">
                   {STORES.map(store => (
                     <button
                       key={store}
@@ -225,7 +228,7 @@ export default function Home() {
               </form>
             )}
 
-            {/* LISTENBEREICH: Am iPhone untereinander, am iPad nebeneinander (grid-cols-1 md:grid-cols-2) */}
+            {/* LISTENBEREICH */}
             <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 overflow-hidden">
               
               {/* LINKE SPALTE: OFFENE ARTIKEL */}
@@ -235,7 +238,10 @@ export default function Home() {
                 </h2>
                 <div className="space-y-2.5">
                   {activeItems.length === 0 ? (
-                    <p className="text-center py-8 text-gray-500 text-sm">Alles erledigt! Keine offenen Artikel.</p>
+                    <div className="text-center py-12 text-gray-500">
+                      <span className="text-3xl block mb-1">🎉</span>
+                      <p className="text-sm">Alles im Wagen!</p>
+                    </div>
                   ) : (
                     activeItems.map((item, index) => {
                       const showStoreHeader = index === 0 || activeItems[index - 1].store !== item.store;
@@ -281,7 +287,6 @@ export default function Home() {
                               </div>
                             </div>
 
-                            {/* Mengen-Regler */}
                             <div className="flex items-center gap-2 shrink-0">
                               {!isFocusMode && (
                                 <div className="flex items-center bg-gray-800/80 rounded-xl border border-gray-600/50 overflow-hidden">
@@ -305,15 +310,16 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* RECHTE SPALTE: ERLEDIGTE ARTIKEL (Am iPad getrennt sichtbar!) */}
+              {/* RECHTE SPALTE: ERLEDIGTE ARTIKEL */}
               <div className="flex flex-col h-full overflow-y-auto pr-1 border-t md:border-t-0 md:border-l border-gray-700/50 pt-4 md:pt-0 md:pl-4">
                 <div className="flex justify-between items-center mb-2 sticky top-0 bg-gray-800 py-1 z-10">
                   <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider">
                     Bereits im Wagen
                   </h2>
-                  {checkedItems.length > 0 && !isFocusMode && (
-                    <button onClick={clearChecked} className="text-xs text-red-400 hover:underline font-semibold">
-                      Leeren
+                  {/* FIX: Text auf "🏁 Einkauf fertig" geändert und mit Sicherheitsfrage verknüpft */}
+                  {checkedItems.length > 0 && (
+                    <button onClick={handleClearChecked} className="text-xs text-red-400 hover:text-red-300 font-bold bg-gray-900/50 px-3 py-1.5 rounded-xl border border-red-500/30 active:scale-95 transition-all shadow-sm">
+                      🏁 Einkauf fertig
                     </button>
                   )}
                 </div>
@@ -326,7 +332,7 @@ export default function Home() {
                       <div
                         key={item.id}
                         onClick={() => toggleItem(item.id)}
-                        className="flex justify-between items-center border rounded-2xl p-3 bg-gray-800/20 border-gray-700/40 text-gray-500 line-through opacity-40 cursor-pointer"
+                        className="flex justify-between items-center border rounded-2xl p-3 bg-gray-800/20 border-gray-700/40 text-gray-400 opacity-50 cursor-pointer hover:bg-gray-700/20 transition-all"
                       >
                         <div className="flex items-center gap-3 min-w-0">
                           <div className="w-5.5 h-5.5 rounded-lg bg-emerald-500 border border-emerald-500 flex items-center justify-center shrink-0">
@@ -334,7 +340,7 @@ export default function Home() {
                               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                             </svg>
                           </div>
-                          <span className="font-medium break-words text-base">
+                          <span className="font-semibold break-words text-base tracking-wide">
                             {item.quantity > 1 && `${item.quantity}x `}
                             {item.text}
                           </span>
