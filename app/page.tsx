@@ -38,8 +38,6 @@ export default function Home() {
           const currentItems = data || [];
           setItems(currentItems);
           
-          {/* FIX: Wenn die Liste komplett leer ist (z.B. nach dem Leeren oder beim App-Start), 
-              schalten wir den Fokus-Modus automatisch ab, damit das Eingabefeld sichtbar wird */}
           if (currentItems.length === 0) {
             setIsFocusMode(false);
           }
@@ -243,11 +241,19 @@ export default function Home() {
                   Zu kaufen
                 </h2>
                 <div className="space-y-2.5">
+                  {/* FIX: Unterscheidung zwischen "Einkauf erledigt" (Party) und "Liste komplett neu/leer" (Klemmbrett) */}
                   {activeItems.length === 0 ? (
-                    <div className="text-center py-12 text-gray-500">
-                      <span className="text-3xl block mb-1">🎉</span>
-                      <p className="text-sm">Alles im Wagen!</p>
-                    </div>
+                    items.length > 0 ? (
+                      <div className="text-center py-12 text-gray-500">
+                        <span className="text-3xl block mb-1">🎉</span>
+                        <p className="text-sm">Alles im Wagen!</p>
+                      </div>
+                    ) : (
+                      <div className="text-center py-12 text-gray-600">
+                        <span className="text-3xl block mb-1">📋</span>
+                        <p className="text-sm">List noch leer</p>
+                      </div>
+                    )
                   ) : (
                     activeItems.map((item, index) => {
                       const showStoreHeader = index === 0 || activeItems[index - 1].store !== item.store;
