@@ -35,7 +35,14 @@ export default function Home() {
         const res = await fetch('/api/shopping');
         if (res.ok) {
           const data = await res.json();
-          setItems(data || []);
+          const currentItems = data || [];
+          setItems(currentItems);
+          
+          {/* FIX: Wenn die Liste komplett leer ist (z.B. nach dem Leeren oder beim App-Start), 
+              schalten wir den Fokus-Modus automatisch ab, damit das Eingabefeld sichtbar wird */}
+          if (currentItems.length === 0) {
+            setIsFocusMode(false);
+          }
         }
       } catch (err) {
         console.error("Fehler beim Laden:", err);
@@ -123,13 +130,12 @@ export default function Home() {
     saveToDatabase(newItems);
   };
 
-  // FIX: Hier ist die Sicherheitsabfrage und das automatische Zurücksetzen des Fokus-Modus eingebaut
   const handleClearChecked = () => {
     const confirmClear = window.confirm("Wollen Sie den Wagen leeren?");
     if (confirmClear) {
       const newItems = items.filter(item => !item.checked);
       saveToDatabase(newItems);
-      setIsFocusMode(false); // Zurück in den Planungsmodus schalten
+      setIsFocusMode(false);
     }
   };
 
@@ -316,7 +322,6 @@ export default function Home() {
                   <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider">
                     Bereits im Wagen
                   </h2>
-                  {/* FIX: Text auf "🏁 Einkauf fertig" geändert und mit Sicherheitsfrage verknüpft */}
                   {checkedItems.length > 0 && (
                     <button onClick={handleClearChecked} className="text-xs text-red-400 hover:text-red-300 font-bold bg-gray-900/50 px-3 py-1.5 rounded-xl border border-red-500/30 active:scale-95 transition-all shadow-sm">
                       🏁 Einkauf fertig
